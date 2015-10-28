@@ -13,6 +13,35 @@
             <input type="submit" value="Send">
         </form>
 
+        <div id="output">
+        	Messages come out here:<br>
+        </div>
+
+
+    <script>
+    	function subscribe(socket, type, callback) {		
+	            socket.emit('subscribe', type);
+	            socket.on(type, callback);
+    	}  
+
+        var socket = io.connect(window.location.host);
+
+        //Once we've connected
+        socket.on('connect', function(data) {
+
+        	// Start getting weather updates
+	        subscribe(socket, 'weather', function(data){
+
+	        	// Log them to the screen.
+	        	// console.log(data);
+	        	document.getElementById('output').innerHTML += data+'<br/>';
+	        });
+
+	        setInterval(function(){
+		        socket.emit('broadcast', {type:'weather', payload:'test'})
+	        }, 100);
+        });
+    </script>
     </body>
 
 </html>  

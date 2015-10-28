@@ -24,6 +24,29 @@ app.get('/', function(req, res,next) {
 });
 
 
+subscriptions = {};
+
+io.on('connection', function(client) {  
+    console.log('Client connected...');
+
+    client.on('subscribe', function(type) {
+    	if (!subscriptions[type]) {
+    		subscriptions[type] = [];
+    	}
+    	subscriptions[type].push(client);
+        console.log('Client subscribed to: '+type);
+
+    });
+
+    client.on('broadcast', function(data) {
+    	if (subscriptions[data.type]) {
+    		for (var i=0, l=subscriptions[data.type].length; i<l; i++) {
+    			subscriptions[data.type][i].emit(data.type, data.payload);
+    		}
+    	}
+    })
+});
+
 console.log('Server started');
 
 server.listen(port);
