@@ -3,43 +3,33 @@
     <head>
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <script src="/socket.io/socket.io.js"></script>            
+        <script src="http://code.highcharts.com/highcharts.js"></script>       
+        <script src="http://code.highcharts.com/highcharts-more.js"></script>       
+
     </head>
     <body>
 
         <h1>CISC 340 IoT Landing Page</h1>
-        
-        <form id="form" id="chat_form">
-            <input id="chat_input" type="text">
-            <input type="submit" value="Send">
-        </form>
 
         <div id="output">
-        	Messages come out here:<br>
+        	Messages come out here:<br/>
         </div>
 
 
     <script>
-    	function subscribe(socket, type, callback) {		
-	            socket.emit('subscribe', type);
-	            socket.on(type, callback);
-    	}  
 
         var socket = io.connect(window.location.host);
 
-        //Once we've connected
+        // Once we've connected
         socket.on('connect', function(data) {
 
-        	// Start getting weather updates
-	        subscribe(socket, 'weather', function(data){
-
+            socket.emit('subscribe', 'weather');
+            socket.on('weather', function(data)) {
 	        	// Log them to the screen.
 	        	// console.log(data);
-	        	document.getElementById('output').innerHTML += 'Temp:'+data.temp+' Light:'+data.light+'<br/>';
-	        });
+	        	document.getElementById('output').innerHTML += 'Temp:'+data.temp+' Light:'+data.light+'<br/>';   
+            });
 
-	        // setInterval(function(){
-		        // socket.emit('broadcast', {type:'weather', payload:'test'})
-	        // }, 100);
         });
     </script>
     </body>
