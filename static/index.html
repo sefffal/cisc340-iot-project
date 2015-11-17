@@ -34,12 +34,12 @@
 
 	        	// Log them to the screen.
 	        	// console.log(data);
-	        	document.getElementById('output').innerHTML += data+'<br/>';
+	        	document.getElementById('output').innerHTML += 'Temp:'+data.temp+' Light:'+data.light+'<br/>';
 	        });
 
-	        setInterval(function(){
-		        socket.emit('broadcast', {type:'weather', payload:'test'})
-	        }, 100);
+	        // setInterval(function(){
+		        // socket.emit('broadcast', {type:'weather', payload:'test'})
+	        // }, 100);
         });
     </script>
     </body>
