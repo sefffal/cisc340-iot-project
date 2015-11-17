@@ -24,7 +24,7 @@
         socket.on('connect', function(data) {
 
             socket.emit('subscribe', 'weather');
-            socket.on('weather', function(data)) {
+            socket.on('weather', function(data) {
 	        	// Log them to the screen.
 	        	// console.log(data);
 	        	document.getElementById('output').innerHTML += 'Temp:'+data.temp+' Light:'+data.light+'<br/>';   
