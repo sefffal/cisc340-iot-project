@@ -38,6 +38,11 @@ io.on('connection', function(client) {
 
     });
 
+
+    setInterval(function(){
+        client.emit('weather', {temp:2, light:3});
+    }, 1000);
+
     client.on('broadcast', function(data) {
     	if (subscriptions[data.type]) {
     		for (var i=0, l=subscriptions[data.type].length; i<l; i++) {
