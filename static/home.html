@@ -137,6 +137,8 @@
     <script src="assets/plugins/highcharts/highcharts.js"></script>
     <script src="assets/plugins/highcharts/modules/exporting.js"></script>
     <!-- Switch -->
+    <!-- Socket IO -->
+    <script src="/socket.io/socket.io.js"></script>   
     <script src="assets/plugins/switchery/switchery.min.js"></script>
     <!--Load these page level functions-->
     <script>
@@ -218,7 +220,35 @@
     });
 });
 
-</script>
+
+        // Hook up the socket.io connection
+        var socket = io.connect(window.location.host);
+
+        // Use this to store all the weather information
+        var weather_data = [];
+
+        // Once we've connected
+        socket.on('connect', function(data) {
+
+            // Ask for all historical weather
+            socket.emit('weather-all');
+            socket.on('weather-all', function(data_points){
+                for (var i=0,l=data_points.length;i<l;i++) {
+                    document.getElementById('output').innerHTML += 'Temp:'+data_points[i].temp+' Light:'+data_points[i].light+'<br/>';   
+                }
+            });
+
+            // Ask for realtime weather updates
+            socket.emit('subscribe-weather');
+            // And do this when we get them:
+            socket.on('weather', function(data_point) {
+                // Log them to the screen.
+                // console.log(data_point);
+                document.getElementById('output').innerHTML += 'Temp:'+data_point.temp+' Light:'+data_point.light+'<br/>';   
+            });
+
+        });
+    </script>
 </body>
 
 </html>
