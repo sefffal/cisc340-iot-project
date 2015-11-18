@@ -36,11 +36,12 @@
             });
 
             // Ask for all historical weather
-            socket.emit('weather-all', function(data_points){
+            socket.emit('weather-all');
+            socket.on('weather-all', function(data_points){
                 for (var i=0,l=data_points.length;i<l;i++) {
                     document.getElementById('output').innerHTML += 'Temp:'+data_points[i].temp+' Light:'+data_points[i].light+'<br/>';   
                 }
-            })
+            });
 
         });
     </script>
