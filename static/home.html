@@ -158,8 +158,12 @@
                 marginRight: 10,
                 zoomType: 'x',
             },
+            credits: {
+                enabled: false
+            }
             title: {
-                text: 'Temperature Sensor'
+                enabled: false
+                text: 'Light Sensor'
             },
             xAxis: {
                 type: 'datetime',
@@ -167,13 +171,22 @@
             },
             yAxis: {
                 title: {
-                    text: 'Value'
+                    text: 'Sunlight'
                 },
                 plotLines: [{
                     value: 0,
                     width: 1,
                     color: '#808080'
-                }]
+                }],
+                min: 0,
+                max: 5.0
+            },
+            plotOptions: {
+                line: {
+                    marker: {
+                        enabled: false
+                    }
+                }
             },
             tooltip: {
                 formatter: function () {
@@ -213,7 +226,7 @@
                 for (var i=0,l=data_points.length;i<l;i++) {
                     data_in[i] = [
                         data_points[i].time,
-                        data_points[i].light
+                        5-data_points[i].light
                     ];
                 }
                 chart.series[0].setData(data_in);
@@ -229,7 +242,7 @@
 
                 chart.series[0].addPoint([
                     data_point.time,
-                    data_point.light
+                    5-data_point.light
                 ], true, true);
                 // document.getElementById('output').innerHTML += 'Temp:'+data_point.light+' Light:'+data_point.light+'<br/>';   
             });
