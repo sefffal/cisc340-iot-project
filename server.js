@@ -1,3 +1,4 @@
+
 /*
  * CISC 340 IOT Project.
  *
@@ -29,7 +30,7 @@ app.set('port', port);
 
 // Max data array size
 // Cap to this much data
-var max_data = 24*60*60*2; // 2 updates per second for one day
+var max_data = 24*60*60*2/10; // 2 updates per second for one day saving every 10th
 
 // Create a webserver to host it
 var http = require('http');
@@ -62,17 +63,18 @@ function weather_received_callback(data) {
 
     // Add the new data to our data array
     var i = weather_data.length;
-    // But cap the weather array to max_data
-    if (i > max_data) {
-        // This is extraodinarily inefficient.
-        // We should actually wrap around the index using i%max_data
-        weather_data.splice(i, 200);
-        i-=200;
+    if (i % 10 == 0){
+        // But cap the weather array to max_data
+        if (i > max_data) {
+            // This is extraodinarily inefficient.
+            // We should actually wrap around the index using i%max_data
+            weather_data.splice(0, 2000);
+            i-=2000;
+        }
+        weather_data[i] = data;
     }
-    weather_data[i] = data;
-
     // Send out the new weather update
-    for (var i=0, l=weather_clients.length; i<l; i++) {
+    for (var i=0, l=weather_clients.length; i<l;i++) {
         weather_clients[i].emit('weather', data);
     }
 }
@@ -112,9 +114,10 @@ io.on('connection', function(client) {
 
 });
 // For testing purposes
+?\/*
 setInterval(function(){
     weather_received_callback({temp:Math.random()*35, light:Math.random()*5});
 }, 500);
-
+*/
 console.log('Server started on port '+port);
 server.listen(port);
