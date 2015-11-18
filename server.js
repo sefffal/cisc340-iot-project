@@ -114,7 +114,7 @@ io.on('connection', function(client) {
 
 });
 // For testing purposes
-?\/*
+/*
 setInterval(function(){
     weather_received_callback({temp:Math.random()*35, light:Math.random()*5});
 }, 500);
