@@ -19,7 +19,7 @@ var temp_sensor = new mraa.Aio(2);
 // Get readings from the sensors, and return them as an object.
 function getReadings() {
 	return {
-		'temp': (500*temp_sensor.read())/1024,
+		'temp': (500*temp_sensor.read())/1024 - 10,
 		'light': light_sensor.readFloat()*5.0
 	};
 }
@@ -35,7 +35,9 @@ socket.on('connect', function () {
 
 	// Send updates to the server twice a second	
 	setInterval(function() {
+		var reading = getReadings();
 		console.log( getReadings() );
+		socket.emit('weather', reading);
 	}, 500);
 	
 });
