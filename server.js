@@ -1,3 +1,23 @@
+/*
+ * CISC 340 IOT Project.
+ *
+ * Author: Will Thompson
+ *
+ * This is the Node.js server for our weather application.
+ * It serves a static directory for the web app, and it
+ * hosts a socket.io server for live udpates.
+ *
+ * Here are the events it supports:
+ * - subscribe-weather  Indicates this client wants realtime weather updates
+ * - weather-all        Request to get all available weather information from the server
+ * - weather            New weather information from the Intel Edison
+ *
+ * It generates the following events:
+ * - weather            New weather information sent out to all weather clients
+ *                      in response to a weather event from the Edison
+ * - weather-all        Send out all weather the server has recorded
+ *
+ */
 
 // Create an express app
 var express = require('express');
@@ -24,34 +44,64 @@ app.get('/', function(req, res,next) {
 });
 
 
-subscriptions = {};
+// This is a list of clients subscribed to weather updates
+weather_clients = [];
 
+// This is a big array of our weather data
 io.on('connection', function(client) {  
-    console.log('Client connected...');
 
-    client.on('subscribe', function(type) {
-    	if (!subscriptions[type]) {
-    		subscriptions[type] = [];
-    	}
-    	subscriptions[type].push(client);
-        console.log('Client subscribed to: '+type);
+    console.log('Connection from client: '+client.handshake.address);
 
+    // Clients send this if they want to get realtime weather updates
+    client.on('subscribe-weather', function() {
+
+        // Add them to the list weather_clients
+        var i = weather_clients.length;
+        weather_clients.[i] = client;
+
+        console.log('Client '+client.handshake.address+' subscribed to weather updates');
+
+        // This is the disconnect event.
+        // We only need to do this cleanup if they subscribed to weather, though.
+        // That's why it is inside the subscribe-weather event.
+        client.on('disconnect',function() {
+            // Remove the client from the list
+            weather_clients.splice(i, 1);
+            console.log('Client '+client.handshake.address+' has disconnected');
+        });
     });
 
+    // Clients send this if they want all the information on weather that the server has collected
+    client.on('weather-all', function() {
+        console.log('Client '+client.handshake.address+' asked for all weather data');
+        client.emit('weather-all', weather_data);
+    });
 
+    // This is triggered when we get a weather update from the Edison
+    function weather_received_callback(data) {
+
+        // Add a timestamp to the data.
+        // We do that here instead of the Edison because we trust
+        // the server's clock more.
+        data.time = new Date();
+
+        // Add the new data to our data array
+        var i = weather_data.length;
+        weather_data[i] = data;
+
+        // Send out the new weather update
+        for (var i=0, l=weather_clients.length; i<l; i++) {
+            weather_clients[i].emit('weather', data);
+        }
+    }
+    client.on('weather', weather_received_callback);
+
+    // For testing purposes
     setInterval(function(){
-        client.emit('weather', {temp:2, light:3});
+        weather_received_callback({temp:Math.random()*35, light:Math.random()*5});
     }, 1000);
 
-    client.on('broadcast', function(data) {
-    	if (subscriptions[data.type]) {
-    		for (var i=0, l=subscriptions[data.type].length; i<l; i++) {
-    			subscriptions[data.type][i].emit(data.type, data.payload);
-    		}
-    	}
-    })
 });
 
-console.log('Server started');
-
+console.log('Server started on port '+port);
 server.listen(port);
