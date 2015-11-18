@@ -30,7 +30,7 @@ app.set('port', port);
 
 // Max data array size
 // Cap to this much data
-var max_data = 5*60*60*2; // 2 updates per second for one day saving every 10th
+var max_data = 60; // 2 updates per second for one day saving every 10th
 
 // Create a webserver to host it
 var http = require('http');

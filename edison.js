@@ -38,7 +38,7 @@ socket.on('connect', function () {
 		var reading = getReadings();
 		console.log( getReadings() );
 		socket.emit('weather', reading);
-	}, 500);
+	}, 1000);
 	
 });
 
