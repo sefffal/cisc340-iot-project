@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CISC 340 : Project 2</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Fonts  -->
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/simple-line-icons.css">
+    <!-- CSS Animate -->
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <!-- Switchery -->
+    <link rel="stylesheet" href="assets/plugins/switchery/switchery.min.css">
+    <!-- Style -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <!-- Feature detection -->
+    <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="assets/js/vendor/html5shiv.js"></script>
+    <script src="assets/js/vendor/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <section id="main-wrapper" class="theme-default">
+        <header id="header">
+            <!--logo start-->
+            <div class="brand">
+                <a href="index.html" class="logo">
+                    <i class="icon-pie-chart"></i>
+                    <span>TEAM</span>TWO</a>
+            </div>
+            <!--logo end-->
+            <ul class="nav navbar-nav navbar-right">
+                 <li class="toggle-fullscreen hidden-xs">
+                    <button type="button" class="btn btn-default expand" id="toggle-fullscreen">
+                        <i class="fa fa-expand"></i>
+                    </button>
+                </li>
+            </ul>
+        </header>
+        <!--main content start-->
+        <section class="main-content-wrapper">
+            <div class="pageheader">
+                <h1>Dashboard</h1>
+                <p class="description">CISC 340 Project 2 : Temperature and Lighting Results</p>
+            </div>
+            <section id="main-content" class="animated fadeInUp">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">LIGHT</h3>
+                                <div class="actions pull-right">
+                                    <i class="fa fa-expand"></i>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">TEMPERATURE</h3>
+                                <div class="actions pull-right">
+                                    <i class="fa fa-expand"></i>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">SERVER STATS</h3>
+                                <div class="actions pull-right">
+                                    <i class="fa fa-expand"></i>
+                                </div>
+                            </div>
+                            <div class="panel-body server-chart">
+                                <div class="row">
+
+                            <div id="highchats-main"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </section>
+        </section>
+        <!--main content end-->
+    </section>
+    <!--sidebar right start-->
+   
+    <!--Global JS-->
+    <script src="assets/js/vendor/jquery-1.11.1.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/plugins/navgoco/jquery.navgoco.min.js"></script>
+    <script src="assets/plugins/pace/pace.min.js"></script>
+    <script src="assets/plugins/fullscreen/jquery.fullscreen-min.js"></script>
+    <script src="assets/js/src/app.js"></script>
+    <!--Page Level JS-->
+    <script src="assets/plugins/countTo/jquery.countTo.js"></script>
+    <script src="assets/plugins/weather/js/skycons.js"></script>
+    <script src="assets/plugins/daterangepicker/moment.min.js"></script>
+    <script src="assets/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- ChartJS  -->
+    <script src="assets/plugins/chartjs/Chart.min.js"></script>
+    <!-- High Chart -->
+    <script src="assets/plugins/highcharts/highcharts.js"></script>
+    <script src="assets/plugins/highcharts/modules/exporting.js"></script>
+    <!-- Switch -->
+    <script src="assets/plugins/switchery/switchery.min.js"></script>
+    <!--Load these page level functions-->
+    <script>
+
+    $(function () {
+    $(document).ready(function () {
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+
+        $('#highchats-main').highcharts({
+            chart: {
+                type: 'spline',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10,
+                events: {
+                    load: function () {
+
+                        // set up the updating of the chart each second
+                        var series = this.series[0];
+                        setInterval(function () {
+                            var x = (new Date()).getTime(), // current time
+                                y = Math.random();
+                            series.addPoint([x, y], true, true);
+                        }, 1000);
+                    }
+                }
+            },
+            title: {
+                text: 'Live random data'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'Value'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'Random data',
+                data: (function () {
+                    // generate an array of random data
+                    var data = [],
+                        time = (new Date()).getTime(),
+                        i;
+
+                    for (i = -19; i <= 0; i += 1) {
+                        data.push({
+                            x: time + i * 1000,
+                            y: Math.random()
+                        });
+                    }
+                    return data;
+                }())
+            }]
+        });
+    });
+});
+
+</script>
+</body>
+
+</html>
