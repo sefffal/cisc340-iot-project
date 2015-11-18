@@ -159,20 +159,33 @@
                 type: 'datetime',
                 tickPixelInterval: 150
             },
-            yAxis: {
-                title: {
-                    text: 'Sunlight'
+            yAxis: [
+                {
+                    title: {
+                        text: 'Temperature'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }],
+                    min: 0
                 },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }],
-                min: 0,
-                max: 5.0
-            },
+                {
+                    title: {
+                        text: 'Sunlight'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }],
+                    min: 0,
+                    max: 5.0
+                }
+            ],
             plotOptions: {
-                line: {
+                spline: {
                     marker: {
                         enabled: false
                     }
@@ -200,12 +213,14 @@
                 {
                     name: 'Light',
                     data: [],
-                    color: 'yellow'
+                    color: 'yellow',
+                    yAxis: 2
                 },
                 {
                     name: 'Temperature',
                     data: [],
-                    color: 'red'
+                    color: 'red',
+                    yAxis: 1
                 }
             ]
         });
