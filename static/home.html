@@ -151,22 +151,22 @@
             }
         });
 
-        $('#highchats-main').highcharts({
+        var chart = $('#highchats-main').highcharts({
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
                 marginRight: 10,
                 events: {
-                    load: function () {
+                    // load: function () {
 
-                        // set up the updating of the chart each second
-                        var series = this.series[0];
-                        setInterval(function () {
-                            var x = (new Date()).getTime(), // current time
-                                y = Math.random();
-                            series.addPoint([x, y], true, true);
-                        }, 1000);
-                    }
+                    //     // set up the updating of the chart each second
+                    //     var series = this.series[0];
+                    //     setInterval(function () {
+                    //         var x = (new Date()).getTime(), // current time
+                    //             y = Math.random();
+                    //         series.addPoint([x, y], true, true);
+                    //     }, 1000);
+                    // }
                 }
             },
             title: {
@@ -200,26 +200,13 @@
                 enabled: false
             },
             series: [{
-                name: 'Random data',
-                data: (function () {
-                    // generate an array of random data
-                    var data = [],
-                        time = (new Date()).getTime(),
-                        i;
-
-                    for (i = -19; i <= 0; i += 1) {
-                        data.push({
-                            x: time + i * 1000,
-                            y: Math.random()
-                        });
-                    }
-                    return data;
-                }())
+                name: 'Temperature',
+                data: []
             }]
         });
-    });
-});
 
+
+        var chart = $('#highchats-main').highcharts();
 
         // Hook up the socket.io connection
         var socket = io.connect(window.location.host);
@@ -233,9 +220,15 @@
             // Ask for all historical weather
             socket.emit('weather-all');
             socket.on('weather-all', function(data_points){
+                var data_in = [];
                 for (var i=0,l=data_points.length;i<l;i++) {
-                    document.getElementById('output').innerHTML += 'Temp:'+data_points[i].temp+' Light:'+data_points[i].light+'<br/>';   
+                    data_in[i] = [
+                        data_points[i].time,
+                        data_points[i].light
+                    ];
                 }
+                chart.series[0].setData(data_in);
+
             });
 
             // Ask for realtime weather updates
@@ -244,10 +237,17 @@
             socket.on('weather', function(data_point) {
                 // Log them to the screen.
                 // console.log(data_point);
-                document.getElementById('output').innerHTML += 'Temp:'+data_point.temp+' Light:'+data_point.light+'<br/>';   
+
+                chart.series[0].addPoint([
+                    data_point.time,
+                    data_point.light
+                ], true, true);
+                // document.getElementById('output').innerHTML += 'Temp:'+data_point.light+' Light:'+data_point.light+'<br/>';   
             });
 
         });
+    });
+});
     </script>
 </body>
 

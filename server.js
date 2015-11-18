@@ -63,7 +63,7 @@ function weather_received_callback(data) {
 
     // Add the new data to our data array
     var i = weather_data.length;
-    if (i % 10 == 0){
+    if (i % 1 == 0){
         // But cap the weather array to max_data
         if (i > max_data) {
             // This is extraodinarily inefficient.
@@ -114,10 +114,10 @@ io.on('connection', function(client) {
 
 });
 // For testing purposes
-/*
-setInterval(function(){
-    weather_received_callback({temp:Math.random()*35, light:Math.random()*5});
-}, 500);
-*/
+
+// setInterval(function(){
+//     weather_received_callback({temp:Math.random()*35, light:Math.random()*5});
+// }, 500);
+
 console.log('Server started on port '+port);
 server.listen(port);
