@@ -26,21 +26,21 @@
         // Once we've connected
         socket.on('connect', function(data) {
 
-            // Ask for realtime weather updates
-            socket.emit('subscribe-weather');
-            // And do this when we get them:
-            socket.on('weather', function(data_point) {
-	        	// Log them to the screen.
-	        	// console.log(data_point);
-	        	document.getElementById('output').innerHTML += 'Temp:'+data_point.temp+' Light:'+data_point.light+'<br/>';   
-            });
-
             // Ask for all historical weather
             socket.emit('weather-all');
             socket.on('weather-all', function(data_points){
                 for (var i=0,l=data_points.length;i<l;i++) {
                     document.getElementById('output').innerHTML += 'Temp:'+data_points[i].temp+' Light:'+data_points[i].light+'<br/>';   
                 }
+            });
+
+            // Ask for realtime weather updates
+            socket.emit('subscribe-weather');
+            // And do this when we get them:
+            socket.on('weather', function(data_point) {
+                // Log them to the screen.
+                // console.log(data_point);
+                document.getElementById('output').innerHTML += 'Temp:'+data_point.temp+' Light:'+data_point.light+'<br/>';   
             });
 
         });

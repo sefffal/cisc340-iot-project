@@ -82,6 +82,12 @@ io.on('connection', function(client) {
 
     console.log('Connection from client: '+client.handshake.address);
 
+    // Clients send this if they want all the information on weather that the server has collected
+    client.on('weather-all', function() {
+        console.log('Client '+client.handshake.address+' asked for all weather data');
+        client.emit('weather-all', weather_data);
+    });
+
     // Clients send this if they want to get realtime weather updates
     client.on('subscribe-weather', function() {
 
@@ -99,12 +105,6 @@ io.on('connection', function(client) {
             weather_clients.splice(i, 1);
             console.log('Client '+client.handshake.address+' has disconnected');
         });
-    });
-
-    // Clients send this if they want all the information on weather that the server has collected
-    client.on('weather-all', function() {
-        console.log('Client '+client.handshake.address+' asked for all weather data');
-        client.emit('weather-all', weather_data);
     });
 
     // This is triggered when we get a weather update from the Edison
