@@ -200,14 +200,14 @@
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
                 marginRight: 10,
+                marginBottom: 53,
                 zoomType: 'x',
             },
             credits: {
                 enabled: false
             },
             title: {
-                enabled: false,
-                text: 'Light Sensor'
+                text: null
             },
             xAxis: {
                 type: 'datetime',
@@ -226,6 +226,7 @@
                         text: 'Sunlight'
                     },
                     min: 0,
+                    opposite:true,
                     max: 5.0
                 }
             ],
