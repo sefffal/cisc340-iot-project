@@ -44,7 +44,7 @@ var io = require('socket.io')(server);
 app.use(express.static(__dirname + '/bower_components'));
 app.use(express.static(__dirname + '/static'));
 app.get('/', function(req, res,next) {  
-    res.sendFile(__dirname + '/static/index.html');
+    res.sendFile(__dirname + '/static/home.html');
 });
 
 
@@ -68,8 +68,8 @@ function weather_received_callback(data) {
         if (i > max_data) {
             // This is extraodinarily inefficient.
             // We should actually wrap around the index using i%max_data
-            weather_data.splice(0, 2000);
-            i-=2000;
+            weather_data.splice(0, max_data/4);
+            i-=max_data/4;
         }
         weather_data[i] = data;
     }

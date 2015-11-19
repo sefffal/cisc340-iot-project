@@ -218,6 +218,7 @@
                     title: {
                         text: 'Temperature'
                     },
+                    min: 0
                 },
                 {
                     title: {
@@ -316,11 +317,11 @@
                 ], false, true);
                 chart.series[1].addPoint([
                     data_point.time,
-                    5-data_point.temp
+                    data_point.temp
                 ], false, true);
                 chart.redraw();
 
-                thermometer.series[0].setData([5-data_point.temp]);
+                thermometer.series[0].setData([data_point.temp]);
                 // document.getElementById('output').innerHTML += 'Temp:'+data_point.light+' Light:'+data_point.light+'<br/>';   
             });
 
