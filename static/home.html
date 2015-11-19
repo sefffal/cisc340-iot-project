@@ -159,7 +159,7 @@
             }
         });
 
-        var thermometer = $('#highcharts-thermometer').highcharts({
+        $('#highcharts-thermometer').highcharts({
                 chart: {
                     type: 'column',
                     marginBottom: 53
@@ -195,7 +195,7 @@
             });
 
 
-        var chart = $('#highchats-main').highcharts({
+        $('#highchats-main').highcharts({
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
@@ -270,6 +270,7 @@
 
 
         var chart = $('#highchats-main').highcharts();
+        var thermometer = $('#highcharts-thermometer').highcharts();
 
         // Hook up the socket.io connection
         var socket = io.connect(window.location.host);
