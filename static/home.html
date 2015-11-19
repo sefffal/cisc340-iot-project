@@ -160,39 +160,76 @@
         });
 
         $('#highcharts-thermometer').highcharts({
-                chart: {
-                    type: 'column',
-                    marginBottom: 53
-                },
-                credits: {
+            chart: {
+                marginBottom: 50
+            },
+            series: [{
+                data: [12],
+                type: 'column',
+                pointWidth: 20,
+                threshold: 0,
+                borderWidth: 0,
+                name: 'Temp',
+                color:'#a22'
+            }],
+
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: {
+                labels: {
                     enabled: false
                 },
-                title: null,
-                legend: {
-                    enabled: false
+                lineWidth: 0,
+                tickWidth: 0
+            },
+            yAxis: {
+                min: 0,
+                max: 50,
+                minPadding: 0,
+                maxPadding: 0,
+                offset: -45,
+                startOnTick: false,
+                endOnTick: false,
+                title: {
+                    text: ''
                 },
-                exporting: {
-                    enabled: false   
-                },
-                yAxis: {
-                    min: 0,
-                    max: 50,
-                    title: null,
-                    align: 'right'
-                },
-                xAxis: {
-                    labels: {enabled:false}
-                },
-                series: [{
-                    data: [20],
-                    color: 'red'
-                 }]
-            }, function(thermometer) { // on complete
-         
-                thermometer.renderer.image('blank-fundraising-thermometer.svg', 0, 0, 256, 400)
-                    .add();   
-                
-            });
+                tickInterval: 5,
+                minorTickInterval: 1,
+                gridLineWidth: 0,
+                minorGridLineWidth: 0,
+                tickWidth: 1,
+                tickColor:'#444',
+                gridColor:'#000',
+                minorTickWidth: 1
+            },
+            title: {
+                text: ''
+            }
+
+        }, function (chart) {
+            // Draw the shape
+            var series = chart.series[0],
+                point = series.points[0],
+                radius = 20;
+            chart.renderer.circle(
+                chart.plotLeft + point.shapeArgs.x + (point.shapeArgs.width / 2), 
+                chart.plotTop + series.yAxis.len + radius - 5, 
+                20
+            )
+            .attr({
+                fill: series.color
+            })
+            .add();
+            
+        });
+
 
 
         $('#highchats-main').highcharts({
@@ -200,7 +237,7 @@
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
                 marginRight: 10,
-                marginBottom: 53,
+                marginBottom: 50,
                 zoomType: 'x',
             },
             credits: {
@@ -250,7 +287,7 @@
                 }
             },
             legend: {
-                enabled: false
+                enabled: true
             },
             exporting: {
                 enabled: false
@@ -265,7 +302,7 @@
                 {
                     name: 'Temperature',
                     data: [],
-                    color: 'red',
+                    color: '#A22',
                     yAxis: 0
                 }
             ]
