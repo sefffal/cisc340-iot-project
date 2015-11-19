@@ -90,10 +90,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 col-lg-12">
+                    <div class="col-md-12 col-lg-10">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">SERVER STATS</h3>
+                                <h3 class="panel-title">Historical Weather</h3>
                                 <div class="actions pull-right">
                                     <i class="fa fa-expand"></i>
                                 </div>
@@ -102,6 +102,24 @@
                                 <div class="row">
 
                             <div id="highchats-main"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-2">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Temperature</h3>
+                                <div class="actions pull-right">
+                                    <i class="fa fa-expand"></i>
+                                </div>
+                            </div>
+                            <div class="panel-body server-chart">
+                                <div class="row">
+
+                                <div id="highcharts-thermometer"></div>
 
                                 </div>
                             </div>
@@ -141,6 +159,42 @@
             }
         });
 
+        var thermometer = $('#highcharts-thermometer').highcharts({
+                chart: {
+                    type: 'column',
+                    marginBottom: 53
+                },
+                credits: {
+                    enabled: false
+                },
+                title: null,
+                legend: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false   
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: null,
+                    align: 'right'
+                },
+                xAxis: {
+                    labels: {enabled:false}
+                },
+                series: [{
+                    data: [60],
+                    color: 'red'
+                 }]
+            }, function(thermometer) { // on complete
+         
+                thermometer.renderer.image('blank-fundraising-thermometer.svg', 0, 0, 256, 400)
+                    .add();   
+                
+            });
+
+
         var chart = $('#highchats-main').highcharts({
             chart: {
                 type: 'spline',
@@ -164,21 +218,11 @@
                     title: {
                         text: 'Temperature'
                     },
-                    plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }],
                 },
                 {
                     title: {
                         text: 'Sunlight'
                     },
-                    plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }],
                     min: 0,
                     max: 5.0
                 }
@@ -274,6 +318,8 @@
                     5-data_point.temp
                 ], false, true);
                 chart.redraw();
+
+                chart.series[0].setData([5-data_point.temp])
                 // document.getElementById('output').innerHTML += 'Temp:'+data_point.light+' Light:'+data_point.light+'<br/>';   
             });
 
