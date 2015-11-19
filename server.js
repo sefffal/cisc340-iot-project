@@ -63,13 +63,16 @@ function weather_received_callback(data) {
 
     // Add the new data to our data array
     var i = weather_data.length;
-    if (i % 1 == 0){
+    // Only same every 10th value
+    if (i % 1 == 0){ // currently saving every value
         // But cap the weather array to max_data
         if (i > max_data) {
             // This is extraodinarily inefficient.
             // We should actually wrap around the index using i%max_data
-            weather_data.splice(0, max_data/4);
-            i-=max_data/4;
+            // weather_data.splice(0, max_data/4);
+            // i-=max_data/4;
+            weather_data.shift();
+            i--;
         }
         weather_data[i] = data;
     }

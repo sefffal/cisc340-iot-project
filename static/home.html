@@ -28,6 +28,23 @@
     <script src="assets/js/vendor/html5shiv.js"></script>
     <script src="assets/js/vendor/respond.min.js"></script>
     <![endif]-->
+    <style>
+        #temperature-readout {
+            font-size: 40px;
+            text-align: center;
+            margin-right: -0.5em;
+            margin-top: 20px;
+        }
+        .first-row .panel-body > div {
+            height: 120px;
+        }
+        .second-row .panel-body > div {
+            height: 350px;
+        }
+        .panel-title {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -55,9 +72,9 @@
                 <p class="description">CISC 340 Project 2 : Temperature and Lighting Results</p>
             </div>
             <section id="main-content" class="animated fadeInUp">
-                <div class="row">
+                <div class="row first-row">
 
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                    <div class="col-xs-12 col-md-8">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">LIGHT</h3>
@@ -72,7 +89,23 @@
                         </div>
                     </div>
 
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                    <div class="col-xs-6 col-md-2">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">LIGHT</h3>
+                                <div class="actions pull-right">
+                                    <i class="fa fa-expand"></i>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+
+                                    <div id="highcharts-sunshine"></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6 col-md-2">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">TEMPERATURE</h3>
@@ -81,16 +114,17 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-
-
+                                <div class="row">
+                                    <div id="temperature-readout">00&deg;</div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12 col-lg-10">
+                <div class="row second-row">
+                    <div class="col-xs-12 col-md-10">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Historical Weather</h3>
@@ -99,29 +133,21 @@
                                 </div>
                             </div>
                             <div class="panel-body server-chart">
-                                <div class="row">
-
-                            <div id="highchats-main"></div>
-
-                                </div>
+                                    <div id="highchats-main"></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-6 col-lg-2">
+                    <div class="col-xs-12 col-md-2">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Temperature</h3>
+                                <h3 class="panel-title">Thermometer</h3>
                                 <div class="actions pull-right">
                                     <i class="fa fa-expand"></i>
                                 </div>
                             </div>
                             <div class="panel-body server-chart">
-                                <div class="row">
-
                                 <div id="highcharts-thermometer"></div>
-
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -143,7 +169,8 @@
     <script src="assets/plugins/chartjs/Chart.min.js"></script>
     <!-- High Chart -->
     <script src="assets/plugins/highcharts/highcharts.js"></script>
-    <script src="assets/plugins/highcharts/modules/exporting.js"></script>
+    <script src="assets/plugins/highcharts/highcharts-more.js"></script>
+    <script src="assets/plugins/highcharts/modules/solid-gauge.js"></script>
     <!-- Switch -->
     <!-- Socket IO -->
     <script src="/socket.io/socket.io.js"></script>   
@@ -158,6 +185,82 @@
                 useUTC: false
             }
         });
+
+
+        // Sunshine
+        $('#highcharts-sunshine').highcharts({
+            chart: {
+                type: 'solidgauge'
+            },
+            title: null,
+            credits: {enabled:false},
+            pane: {
+                center: ['50%', '85%'],
+                size: '140%',
+                startAngle: -90,
+                endAngle: 90,
+                background: {
+                    backgroundColor: '#eee',
+                    innerRadius: '61%',
+                    outerRadius: '100%',
+                    shape: 'arc'
+                }
+            },
+            
+            pane: {
+                background: {
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
+                }
+            },
+
+            tooltip: {
+                enabled: false
+            },
+
+            // the value axis
+            yAxis: {
+                min: 0,
+                max: 5,
+                title: {
+                    text: ''
+                },
+                stops: [
+                    [0, '#F4E504'],
+                ],
+                lineWidth: 2,
+                minorTickInterval: null,
+                tickInterval: 0.5,
+                title: {
+                    y: -70
+                },
+                labels: {
+                    enabled:false,
+                    x: 0,
+                    align: 'left'
+                },
+                offset: 0,
+                lineColor: '#F4E504',
+                tickColor: '#F4E504',
+                tickWidth: 3,
+                tickLength: 20,
+                tickPosition: "outside"
+            },
+
+            plotOptions: {
+                solidgauge: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                    color: '#F4E504'
+                }
+            },
+            series: [{
+                name: 'Speed',
+                data: [2],
+            }]
+        });
+
 
         $('#highcharts-thermometer').highcharts({
             chart: {
@@ -273,11 +376,6 @@
                     marker: {
                         enabled: false
                     }
-                },
-                series: {
-                    animation: {
-                        duration: 500
-                    }
                 }
             },
             tooltip: {
@@ -288,7 +386,8 @@
                 }
             },
             legend: {
-                enabled: true
+                enabled: true,
+                y: 20
             },
             exporting: {
                 enabled: false
@@ -312,6 +411,7 @@
 
         var chart = $('#highchats-main').highcharts();
         var thermometer = $('#highcharts-thermometer').highcharts();
+        var sunshine = $('#highcharts-sunshine').highcharts();
 
         // Hook up the socket.io connection
         var socket = io.connect(window.location.host);
@@ -350,18 +450,20 @@
             socket.on('weather', function(data_point) {
                 // Log them to the screen.
                 // console.log(data_point);
-
+                var push = chart.series[1].data.length >= 60;
                 chart.series[0].addPoint([
                     data_point.time,
                     5-data_point.light
-                ], false, true);
+                ], false, push);
                 chart.series[1].addPoint([
                     data_point.time,
                     data_point.temp
-                ], false, true);
+                ], false, push);
                 chart.redraw();
 
                 thermometer.series[0].setData([data_point.temp]);
+                sunshine.series[0].setData([5-data_point.light]);
+                document.querySelector('#temperature-readout').innerHTML = (data_point.temp<10?'0':'')+data_point.temp.toFixed(0)+'&deg;';
                 // document.getElementById('output').innerHTML += 'Temp:'+data_point.light+' Light:'+data_point.light+'<br/>';   
             });
 
