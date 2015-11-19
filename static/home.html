@@ -44,6 +44,12 @@
         .panel-title {
             text-align: center;
         }
+        #forecast {
+            text-align: center;
+            font-weight: bold;
+            padding-top: 40px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
@@ -77,14 +83,13 @@
                     <div class="col-xs-12 col-md-8">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">LIGHT</h3>
+                                <h3 class="panel-title">FORECAST</h3>
                                 <div class="actions pull-right">
                                     <i class="fa fa-expand"></i>
                                 </div>
                             </div>
                             <div class="panel-body">
-
-
+                                <div id="forecast"></div>
                             </div>
                         </div>
                     </div>
@@ -92,7 +97,7 @@
                     <div class="col-xs-6 col-md-2">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">LIGHT</h3>
+                                <h3 class="panel-title">SUNSHINE</h3>
                                 <div class="actions pull-right">
                                     <i class="fa fa-expand"></i>
                                 </div>
@@ -465,6 +470,27 @@
                 sunshine.series[0].setData([5-data_point.light]);
                 document.querySelector('#temperature-readout').innerHTML = (data_point.temp<10?'0':'')+data_point.temp.toFixed(0)+'&deg;';
                 // document.getElementById('output').innerHTML += 'Temp:'+data_point.light+' Light:'+data_point.light+'<br/>';   
+
+                // Text Based Forecast
+                var forecast = '';
+                var temp = data_point.temp;
+                var light = 5- data_point.light;
+                if (light > 4 && temp > 29) {
+                    forecast = "It's hot and sunny out, time to hit the beach!";
+                }
+                else if (light > 2 && temp > 21) {
+                    forecast = "Cold and grey out — stay inside and keep warm by the fire!";
+                }
+                else if (light > 3 && temp < 10) {
+                    forecast = "Very chilly! Bundle up!";
+                }
+                else if (light < 1) {
+                    forecast = "A perfect night for stargazing!";
+                }
+                else {
+                    forecast = "A pleasent day!";
+                }
+                document.querySelector('#forecast').textContent = forecast; 
             });
 
         });
