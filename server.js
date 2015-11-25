@@ -118,9 +118,9 @@ io.on('connection', function(client) {
 });
 // For testing purposes
 
-setInterval(function(){
-    weather_received_callback({temp:Math.random()*35, light:Math.random()*5});
-}, 1000);
+//setInterval(function(){
+//    weather_received_callback({temp:Math.random()*35, light:Math.random()*5});
+//}, 1000);
 
 console.log('Server started on port '+port);
 server.listen(port);
